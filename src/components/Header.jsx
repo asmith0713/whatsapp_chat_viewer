@@ -38,6 +38,18 @@ export default function Header({ messages }) {
           <button className="btn btn-light">Light</button>
         </div>
       </div>
+      <button
+  className="btn btn-sm btn-outline-primary"
+  onClick={() => {
+    const trigger = window.deferredPrompt;
+    if (!trigger) return alert('Install prompt not available');
+    trigger.prompt();
+    trigger.userChoice.then(() => { window.deferredPrompt = null; });
+  }}
+>
+  Install App
+</button>
+
     </nav>
   );
 }

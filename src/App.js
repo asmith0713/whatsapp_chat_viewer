@@ -2,6 +2,9 @@ import React, { useState, useEffect } from "react";
 import FileUpload from "./components/FileUpload";
 import ChatView from "./components/ChatView";
 import 'bootstrap/dist/css/bootstrap.min.css';
+import './index';
+import { registerServiceWorker, setupBeforeInstallPrompt } from './sw-register';
+
 
 export default function App(){
   const [messages, setMessages] = useState([]);
