@@ -14,34 +14,34 @@ export default function App(){
   return (
     <div className="app-shell">
       <nav className="site-nav d-flex align-items-center justify-content-between">
-        <div style={{display:"flex",gap:14,alignItems:"center"}}>
+        <div style={{display:"flex",gap:12,alignItems:"center",minWidth:0}}>
           <div className="nav-logo">WV</div>
-          <div className="nav-info">
-            <div className="nav-title">WhatsApp Chat Viewer</div>
+          <div className="nav-info" style={{minWidth:0}}>
+            <div className="nav-title">WhatsApp Viewer</div>
             <div className="nav-subtitle">
               <span className="badge-count">{messages.length}</span>
-              messages loaded
+              {messages.length !== 1 ? "messages" : "message"}
             </div>
           </div>
         </div>
 
-        <div style={{display:"flex",gap:10,alignItems:"center"}}>
+        <div style={{display:"flex",gap:8,alignItems:"center",flexWrap:"wrap",justifyContent:"flex-end"}}>
           <input
             className="nav-search"
-            placeholder="Search messages..."
+            placeholder="Search..."
             onKeyDown={(e)=>{
               if(e.key==='Enter') window.dispatchEvent(new CustomEvent("chat-search",{detail:e.target.value}));
             }}
           />
-          <button className="btn-icon" onClick={()=>{
+          <button className="btn-icon" title="Export chat" onClick={()=>{
             const blob = new Blob([JSON.stringify(messages, null, 2)], {type:"application/json"});
             const url = URL.createObjectURL(blob);
             const a = document.createElement("a");
             a.href = url; a.download = "chat.json"; a.click(); URL.revokeObjectURL(url);
           }}>
-            <span>↓</span> Export
+            ↓ Export
           </button>
-          <button className="btn-theme" onClick={()=>setDark(d=>!d)}>
+          <button className="btn-theme" title="Toggle theme" onClick={()=>setDark(d=>!d)}>
             {dark ? "☀️" : "🌙"}
           </button>
         </div>
@@ -50,18 +50,25 @@ export default function App(){
       <div className="container-main">
         <div className="chat-wrap">
           <div className="chat-header">
-            <div className="chat-title">Chat Messages</div>
-            <div style={{marginLeft:"auto"}}><FileUpload onData={setMessages} /></div>
+            <div className="chat-title">Messages</div>
+            <FileUpload onData={setMessages} />
           </div>
 
           <div className="chat-body">
             <div className="chat-column">
-              <ChatView messages={messages} />
+              {messages.length === 0 ? (
+                <div style={{textAlign:"center",color:"var(--muted)",padding:"40px 20px",fontSize:"0.9rem"}}>
+                  Upload a WhatsApp .txt file to view messages
+                </div>
+              ) : (
+                <ChatView messages={messages} />
+              )}
             </div>
           </div>
 
           <div className="controls-bar">
-            <div className="controls-info">Client-side parsing · Zero data upload</div>
+            <div className="controls-info">Client-side parsing · Zero upload</div>
+            <FileUpload onData={setMessages} />
           </div>
         </div>
       </div>
