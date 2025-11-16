@@ -5,6 +5,9 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './index';
 import './sw-register';
 
+import InstallButton from "./components/InstallButton";
+// in src/App.jsx (or wherever you import it)
+import IOSInstallHint from "./components/IOSInstallHint";
 
 export default function App(){
   const [messages, setMessages] = useState([]);
@@ -44,6 +47,10 @@ export default function App(){
           }}>
             ↓ Export
           </button>
+
+          {/* Install button — shows when beforeinstallprompt fired (Chrome/Android/desktop) */}
+          <InstallButton className="btn btn-sm btn-outline-light" />
+
           <button className="btn-theme" title="Toggle theme" onClick={()=>setDark(d=>!d)}>
             {dark ? "☀️" : "🌙"}
           </button>
@@ -75,6 +82,9 @@ export default function App(){
           </div>
         </div>
       </div>
+
+      {/* iOS hint lives at root so it can float above everything */}
+      <iOSInstallHint />
     </div>
   );
 }

@@ -3,21 +3,26 @@ export function registerServiceWorker() {
     if ('serviceWorker' in navigator && process.env.NODE_ENV === 'production') {
       window.addEventListener('load', () => {
         const swUrl = `${process.env.PUBLIC_URL || ''}/sw.js`;
-        navigator.serviceWorker.register(swUrl).then((registration) => {
-          console.log('ServiceWorker registered: ', registration);
-        }).catch((err) => {
-          console.error('ServiceWorker registration failed: ', err);
-        });
+        console.log('[PWA] Registering service worker at', swUrl);
+        navigator.serviceWorker.register(swUrl)
+          .then(reg => console.log('[PWA] ServiceWorker registered:', reg))
+          .catch(err => console.warn('[PWA] ServiceWorker registration failed:', err));
       });
+    } else {
+      console.log('[PWA] ServiceWorker registration skipped (not production)');
     }
   }
   
-  // optional: basic beforeinstallprompt capture
-  export function setupBeforeInstallPrompt() {
+  window.deferredPrompt = null;
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    window.deferredPrompt = e;
+    window.dispatchEvent(new CustomEvent('pwa-install-available'));
+    console.log('[PWA] beforeinstallprompt captured');
+  });
+  window.addEventListener('appinstalled', () => {
     window.deferredPrompt = null;
-    window.addEventListener('beforeinstallprompt', (e) => {
-      e.preventDefault();
-      window.deferredPrompt = e;
-    });
-  }
+    window.dispatchEvent(new CustomEvent('pwa-installed'));
+    console.log('[PWA] appinstalled');
+  });
   
