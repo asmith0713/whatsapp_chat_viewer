@@ -3,7 +3,7 @@ import FileUpload from "./components/FileUpload";
 import ChatView from "./components/ChatView";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './index';
-import { registerServiceWorker, setupBeforeInstallPrompt } from './sw-register';
+import './sw-register';
 
 
 export default function App(){
